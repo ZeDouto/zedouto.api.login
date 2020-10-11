@@ -20,11 +20,9 @@ namespace Zedouto.Api.Login
     public class Startup
     {
         private const string FIRESTORE_SETTINGS_SECTION = "Firestore";
-        private const string SWAGGER_ENDPOINT = "swagger/v1/swagger.json";
-        private const string APP_NAME = "ZeDouto.Login";
-        private const string APP_VERSION = "V1";
+        private const string APPLICATION_SETTINGS_SECTION = "Application";
+        private const string SWAGGER_ENDPOINT = "/swagger/v1/swagger.json";
 
-        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,6 +34,9 @@ namespace Zedouto.Api.Login
         public void ConfigureServices(IServiceCollection services)
         {
             var firestoreSettings = Configuration.GetSection(FIRESTORE_SETTINGS_SECTION).Get<FirestoreAppSettings>();
+            var applicationSettings = Configuration.GetSection(APPLICATION_SETTINGS_SECTION).Get<ApplicationSettings>();
+
+            services.AddSingleton(applicationSettings);
 
             services.AddSwaggerGen(o =>
             {
@@ -49,7 +50,7 @@ namespace Zedouto.Api.Login
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationSettings applicationSettings)
         {            
             if (env.IsDevelopment())
             {
@@ -59,7 +60,7 @@ namespace Zedouto.Api.Login
             app.UseSwagger();
             app.UseSwaggerUI(o =>
             {
-                o.SwaggerEndpoint(SWAGGER_ENDPOINT, $"{APP_NAME}/{APP_VERSION}");
+                o.SwaggerEndpoint(SWAGGER_ENDPOINT, $"{applicationSettings.Name}/{applicationSettings.Version}");
                 o.RoutePrefix = string.Empty;
             });
 
