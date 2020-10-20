@@ -11,11 +11,11 @@ namespace Zedouto.Api.Login.Controllers
     [Route(Routes.CONTROLLER_CONTEXT)]
     public class UsersController : ControllerBase
     {
-        private readonly IUserFacade _userService;
+        private readonly IUserFacade _userFacade;
         
-        public UsersController(IUserFacade userService)
+        public UsersController(IUserFacade userFacade)
         {
-            _userService = userService;
+            _userFacade = userFacade;
         }
 
         // <summary>
@@ -24,7 +24,7 @@ namespace Zedouto.Api.Login.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUserAsync([FromBody] User user)
         {
-            await _userService.AddUserAsync(user);
+            await _userFacade.AddUserAsync(user);
 
             return Created($"{Routes.API_CONTEXT}/{nameof(UsersController).Replace("Controller", string.Empty)}/{Routes.LOGIN_CONTEXT}", user);
         }
@@ -35,7 +35,7 @@ namespace Zedouto.Api.Login.Controllers
         [HttpPost(Routes.LOGIN_CONTEXT)]
         public async Task<IActionResult> LoginAsync([FromBody] User user)
         {
-            var token = await _userService.LoginAsync(user);
+            var token = await _userFacade.LoginAsync(user);
 
             if (token is null)
             {
