@@ -3,6 +3,7 @@ using Google.Cloud.Firestore;
 using Google.Cloud.Firestore.V1;
 using Microsoft.Extensions.DependencyInjection;
 using Zedouto.Api.Model.Configurations;
+using Zedouto.Api.Model.Entities;
 using Zedouto.Api.Repository;
 using Zedouto.Api.Repository.Interfaces;
 using Zedouto.Api.Service.Interfaces;
@@ -14,6 +15,7 @@ namespace Zedouto.Api.Service.Extensions
         public static IServiceCollection AddApplicationDependencies(this IServiceCollection services, FirestoreAppSettings firestoreSettings)
         {
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IJwtService<User>, UserJwtService>();
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
 
             var builder = new FirestoreClientBuilder();
