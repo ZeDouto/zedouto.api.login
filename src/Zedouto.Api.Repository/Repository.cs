@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Google.Api.Gax.Grpc;
@@ -29,19 +30,57 @@ namespace Zedouto.Api.Repository
             return model.UpdateTime;
         }
 
-        public Task<T> EditAsync(T entity)
+        public async Task<T> GetAsync(Dictionary<string, object> filters)
         {
-            throw new NotImplementedException();
+            var index = 0;
+            Query query = null;
+            
+            do
+            {
+                var filter = filters.ElementAtOrDefault(index);
+
+                if (!string.IsNullOrEmpty(filter.Key))
+                {
+                    query = _collection.WhereEqualTo(filter.Key, filter.Value);
+                }
+
+                index++;
+            }
+            while (index < filters.Count);
+
+            var snapshot = await query.GetSnapshotAsync();
+
+            return snapshot.FirstOrDefault()?.ConvertTo<T>();
         }
 
-        public Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByPathIdAsync(string pathId)
         {
-            throw new NotImplementedException();
+            var snapshot = await _collection.Document(pathId).GetSnapshotAsync();
+            
+            return snapshot.ConvertTo<T>();
         }
 
-        public Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> filter)
+        public async Task<IEnumerable<T>> ListAsync(Dictionary<string, object> filters)
         {
-            throw new NotImplementedException();
+            var index = 0;
+            Query query = null;
+            
+            do
+            {
+                var filter = filters.ElementAtOrDefault(index);
+
+                if (!string.IsNullOrEmpty(filter.Key))
+                {
+                    query = _collection.WhereEqualTo(filter.Key, filter.Value);
+                }
+
+                index++;
+            }
+            while (index < filters.Count);
+
+            var snapshot = await query.GetSnapshotAsync();
+
+            return snapshot.Cast<T>().ToList();
         }
     }
 }

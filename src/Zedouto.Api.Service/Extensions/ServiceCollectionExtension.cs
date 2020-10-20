@@ -10,7 +10,7 @@ using Zedouto.Api.Service.Interfaces;
 namespace Zedouto.Api.Service.Extensions
 {
     public static class ServiceCollectionExtension
-    {                
+    {
         public static IServiceCollection AddApplicationDependencies(this IServiceCollection services, FirestoreAppSettings firestoreSettings)
         {
             services.AddSingleton<IUserService, UserService>();

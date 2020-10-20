@@ -6,5 +6,6 @@ namespace Zedouto.Api.Service.Interfaces
     public interface IUserService
     {
         Task AddUserAsync(User user);
+        Task<User> GetUserAsync(User user);
     }
 }

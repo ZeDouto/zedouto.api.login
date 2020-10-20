@@ -24,7 +24,23 @@ namespace Zedouto.Api.Login.Controllers
         {
             await _userService.AddUserAsync(user);
 
-            return Ok();
+            return CreatedAtAction(nameof(LoginAsync), user);
+        }
+
+        // <summary>
+        // Return a User in database
+        // </summary>
+        [HttpGet]
+        public async Task<IActionResult> LoginAsync([FromQuery] User user)
+        {
+            var userLogged = await _userService.GetUserAsync(user);
+
+            if (userLogged is null)
+            {
+                return NoContent();
+            }
+            
+            return Ok(userLogged);
         }
     }
 }
