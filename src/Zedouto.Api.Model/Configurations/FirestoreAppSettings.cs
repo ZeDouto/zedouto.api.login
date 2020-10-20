@@ -9,5 +9,8 @@ namespace Zedouto.Api.Model.Configurations
 
         [JsonProperty]
         public string CollectionName { get; set; }
+
+        [JsonProperty]
+        public string Credentials { get; set; }
     }
 }
