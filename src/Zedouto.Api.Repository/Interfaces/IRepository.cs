@@ -8,9 +8,9 @@ namespace Zedouto.Api.Repository.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> filter);
+        Task<T> GetByPathIdAsync(string pathId);
+        Task<T> GetAsync(Dictionary<string, object> filters);
+        Task<IEnumerable<T>> ListAsync(Dictionary<string, object> filters);
         Task<Timestamp> AddAsync(T entity);
-        Task<T> EditAsync(T entity);
     }
 }
