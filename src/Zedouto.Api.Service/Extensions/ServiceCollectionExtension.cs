@@ -1,5 +1,6 @@
 using System;
 using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.Extensions.DependencyInjection;
 using Zedouto.Api.Model.Configurations;
 using Zedouto.Api.Repository;
@@ -15,8 +16,11 @@ namespace Zedouto.Api.Service.Extensions
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
 
+            var builder = new FirestoreClientBuilder();
+            builder.JsonCredentials = firestoreSettings.Credentials;
+
             // Add Firestore singleton
-            services.AddSingleton(FirestoreDb.Create(firestoreSettings.ProjectId).Collection(firestoreSettings.CollectionName));
+            services.AddSingleton(FirestoreDb.Create(firestoreSettings.ProjectId, builder.Build()).Collection(firestoreSettings.CollectionName));
             
             return services;
         }
