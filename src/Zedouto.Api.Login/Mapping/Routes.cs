@@ -5,6 +5,6 @@ namespace Zedouto.Api.Login.Mapping
         public const string API_CONTEXT = "/api";
         public const string CONTROLLER_CONTEXT = API_CONTEXT + "/[controller]";
 
-        public const string LOGIN_CONTEXT = "login";
+        public const string LOGIN_CONTEXT = "Login";
     }
 }

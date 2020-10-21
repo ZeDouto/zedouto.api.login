@@ -33,12 +33,13 @@ namespace Zedouto.Api.Service
             
             var expiration = DateTime.UtcNow.AddHours(_jwtSettings.HourExpiration);
             
-            JwtSecurityToken token = new JwtSecurityToken(
+            var token = new JwtSecurityToken(
                issuer: null,
                audience: null,
                claims: claims,
                expires: expiration,
-               signingCredentials: credentials);
+               signingCredentials: credentials
+            );
             
             return new UserToken
             {

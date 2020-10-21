@@ -32,21 +32,15 @@ namespace Zedouto.Api.Repository
 
         public async Task<T> GetAsync(Dictionary<string, object> filters)
         {
-            var index = 0;
-            Query query = null;
-            
-            do
+            var filter = filters.First();
+            var query = _collection.WhereEqualTo(filter.Key, filter.Value);
+
+            for (var i = 1; i < filters.Count; i++)
             {
-                var filter = filters.ElementAtOrDefault(index);
+                filter = filters.ElementAt(i);
 
-                if (!string.IsNullOrEmpty(filter.Key))
-                {
-                    query = _collection.WhereEqualTo(filter.Key, filter.Value);
-                }
-
-                index++;
+                query = query.WhereEqualTo(filter.Key, filter.Value);
             }
-            while (index < filters.Count);
 
             var snapshot = await query.GetSnapshotAsync();
 
@@ -62,21 +56,15 @@ namespace Zedouto.Api.Repository
 
         public async Task<IEnumerable<T>> ListAsync(Dictionary<string, object> filters)
         {
-            var index = 0;
-            Query query = null;
-            
-            do
+            var filter = filters.First();
+            var query = _collection.WhereEqualTo(filter.Key, filter.Value);
+
+            for (var i = 1; i < filters.Count; i++)
             {
-                var filter = filters.ElementAtOrDefault(index);
+                filter = filters.ElementAt(i);
 
-                if (!string.IsNullOrEmpty(filter.Key))
-                {
-                    query = _collection.WhereEqualTo(filter.Key, filter.Value);
-                }
-
-                index++;
+                query = query.WhereEqualTo(filter.Key, filter.Value);
             }
-            while (index < filters.Count);
 
             var snapshot = await query.GetSnapshotAsync();
 
