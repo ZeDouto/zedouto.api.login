@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Zedouto.Api.Model.Entities;
-using Zedouto.Api.Repository.Interfaces;
-using Zedouto.Api.Service.Interfaces;
+using Zedouto.Api.Login.Model.Entities;
+using Zedouto.Api.Login.Repository.Interfaces;
+using Zedouto.Api.Login.Service.Interfaces;
 
-namespace Zedouto.Api.Service
+namespace Zedouto.Api.Login.Service
 {
     public class UserService : IUserService
     {

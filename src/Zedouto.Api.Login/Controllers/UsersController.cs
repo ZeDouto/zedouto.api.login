@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Zedouto.Api.Login.Facade.Interfaces;
 using Zedouto.Api.Login.Mapping;
-using Zedouto.Api.Model.Entities;
-using Zedouto.Api.Service.Interfaces;
+using Zedouto.Api.Login.Model.Entities;
 
 namespace Zedouto.Api.Login.Controllers
 {
@@ -10,11 +10,11 @@ namespace Zedouto.Api.Login.Controllers
     [Route(Routes.CONTROLLER_CONTEXT)]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserFacade _userFacade;
         
-        public UsersController(IUserService userService)
+        public UsersController(IUserFacade userFacade)
         {
-            _userService = userService;
+            _userFacade = userFacade;
         }
 
         // <summary>
@@ -23,7 +23,7 @@ namespace Zedouto.Api.Login.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUserAsync([FromBody] User user)
         {
-            await _userService.AddUserAsync(user);
+            await _userFacade.AddUserAsync(user);
 
             return Created($"{Routes.API_CONTEXT}/{nameof(UsersController).Replace("Controller", string.Empty)}/{Routes.LOGIN_CONTEXT}", user);
         }
@@ -34,14 +34,14 @@ namespace Zedouto.Api.Login.Controllers
         [HttpPost(Routes.LOGIN_CONTEXT)]
         public async Task<IActionResult> LoginAsync([FromBody] User user)
         {
-            var userLogged = await _userService.GetUserAsync(user);
+            var token = await _userFacade.LoginAsync(user);
 
-            if (userLogged is null)
+            if (token is null)
             {
                 return NoContent();
             }
             
-            return Ok(userLogged);
+            return Ok(token);
         }
     }
 }

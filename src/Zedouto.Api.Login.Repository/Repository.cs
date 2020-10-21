@@ -7,10 +7,10 @@ using Google.Api.Gax.Grpc;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Google.Cloud.Firestore.V1;
-using Zedouto.Api.Repository.Interfaces;
+using Zedouto.Api.Login.Repository.Interfaces;
 using static Google.Apis.Auth.OAuth2.ComputeCredential;
 
-namespace Zedouto.Api.Repository
+namespace Zedouto.Api.Login.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
@@ -32,21 +32,15 @@ namespace Zedouto.Api.Repository
 
         public async Task<T> GetAsync(Dictionary<string, object> filters)
         {
-            var index = 0;
-            Query query = null;
-            
-            do
+            var filter = filters.First();
+            var query = _collection.WhereEqualTo(filter.Key, filter.Value);
+
+            for (var i = 1; i < filters.Count; i++)
             {
-                var filter = filters.ElementAtOrDefault(index);
+                filter = filters.ElementAt(i);
 
-                if (!string.IsNullOrEmpty(filter.Key))
-                {
-                    query = _collection.WhereEqualTo(filter.Key, filter.Value);
-                }
-
-                index++;
+                query = query.WhereEqualTo(filter.Key, filter.Value);
             }
-            while (index < filters.Count);
 
             var snapshot = await query.GetSnapshotAsync();
 
@@ -62,25 +56,19 @@ namespace Zedouto.Api.Repository
 
         public async Task<IEnumerable<T>> ListAsync(Dictionary<string, object> filters)
         {
-            var index = 0;
-            Query query = null;
-            
-            do
+            var filter = filters.First();
+            var query = _collection.WhereEqualTo(filter.Key, filter.Value);
+
+            for (var i = 1; i < filters.Count; i++)
             {
-                var filter = filters.ElementAtOrDefault(index);
+                filter = filters.ElementAt(i);
 
-                if (!string.IsNullOrEmpty(filter.Key))
-                {
-                    query = _collection.WhereEqualTo(filter.Key, filter.Value);
-                }
-
-                index++;
+                query = query.WhereEqualTo(filter.Key, filter.Value);
             }
-            while (index < filters.Count);
 
             var snapshot = await query.GetSnapshotAsync();
 
-            return snapshot.Cast<T>().ToList();
+            return snapshot.Cast<T>();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Google.Cloud.Firestore;
 
-namespace Zedouto.Api.Repository.Interfaces
+namespace Zedouto.Api.Login.Repository.Interfaces
 {
     public interface IRepository<T> where T : class
     {

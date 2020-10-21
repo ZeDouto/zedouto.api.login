@@ -1,6 +1,6 @@
 using Google.Cloud.Firestore;
 
-namespace Zedouto.Api.Model.Entities
+namespace Zedouto.Api.Login.Model.Entities
 {
     [FirestoreData]
     public class User

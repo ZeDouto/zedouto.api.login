@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Zedouto.Api.Model.Entities;
+using Zedouto.Api.Login.Model.Entities;
 
-namespace Zedouto.Api.Service.Interfaces
+namespace Zedouto.Api.Login.Service.Interfaces
 {
     public interface IUserService
     {

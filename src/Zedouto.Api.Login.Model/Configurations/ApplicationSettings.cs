@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace Zedouto.Api.Model.Configurations
+namespace Zedouto.Api.Login.Model.Configurations
 {
     public class ApplicationSettings
     {

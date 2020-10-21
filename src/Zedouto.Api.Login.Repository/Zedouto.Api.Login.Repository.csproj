@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Zedouto.Api.Model\Zedouto.Api.Model.csproj" />
+    <ProjectReference Include="..\Zedouto.Api.Login.Model\Zedouto.Api.Login.Model.csproj" />
   </ItemGroup>
 
 
