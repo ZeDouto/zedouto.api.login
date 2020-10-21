@@ -36,8 +36,4 @@ stages:
   - job:
     displayName: 'Publish appsettings'
     steps:
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '**/Zedouto.Api.Login/appsettings.json'
-        ArtifactName: 'AppSettings'
-        publishLocation: 'Container'
+    - script: ls
