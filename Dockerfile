@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
 WORKDIR /app
 
 RUN mkdir -p src
@@ -15,7 +15,7 @@ RUN dotnet publish -c Release -o /out ./Zedouto.Api.Login
 EXPOSE 8080
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine
 WORKDIR /app
 COPY --from=build /out .
 ENTRYPOINT ["dotnet", "Zedouto.Api.Login.dll"]
