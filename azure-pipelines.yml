@@ -27,3 +27,17 @@ stages:
         repository: 'souzamateus99/login-api'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
+
+- stage:
+  displayName: 'Publish artifact (AppSettings)'
+  dependsOn: 'DotnetBuild'
+  condition: in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/dev')
+  jobs:
+  - job:
+    displayName: 'Publish appsettings'
+    steps:
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Zedouto.Api.Login/appsettings.json'
+        ArtifactName: 'AppSettings'
+        publishLocation: 'Container'
