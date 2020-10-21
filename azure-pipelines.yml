@@ -1,0 +1,29 @@
+trigger:
+- master
+- dev
+
+stages:
+- stage: DotnetBuild
+  displayName: 'Dotnet Build'
+  jobs:
+    - job:
+      steps:
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'build'
+            projects: '**/Zedouto.Api.Login/*.csproj'
+
+- stage:
+  displayName: 'Docker build and Push'
+  dependsOn: 'MavenBuild'
+  condition: in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/dev')
+  jobs:
+  - job:
+    displayName: 'Build and Push Docker an image'
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerHub - souzamateus99'
+        repository: 'souzamateus99/login-api'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
