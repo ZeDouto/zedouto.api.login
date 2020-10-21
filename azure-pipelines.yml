@@ -36,4 +36,6 @@ stages:
   - job:
     displayName: 'Publish appsettings'
     steps:
-    - script: ls
+    - script: |
+        ls
+        ls src/
