@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+    application:
+      build: .
+      ports:
+        - "8080:8080"
+      restart: always
+      environment:
+        Application.Name: Zedouto.Api.Login
+        Application.Version: v1
+        Firestore.ProjectId: zedouto-project
+        Firestore.CollectionName: users
+        Firestore.Credentials: {"type": "service_account","project_id": "zedouto-project","private_key_id": "2da290f0077bfb2bf38a54eb78603de319c04d23","private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDY/m3k8y4N08lw\nXZNcMieOhyabgouJTgbzJ8LtlI+xVdn6NhaIwra5XXtvOJwPJy2d3HlO4Tor4SBK\ngBf0NqiwRkSZL+66Ha3crIa3PzDKc1zRTUFWfXY76qTfzGkuqKMcKZtAEaJgcjRl\nxksBoyPyalppMx93j8HtdwrxsLFvdS9U+Im6amDF98YbPAIHWGsgTmnftnhqMMR6\nwRsU7UnUVB1mQfXAaRyTbzswR9xT+iL+FnqV3Kahk9fIIpprOfN/ePCKj1j3bzqu\nql34JM3iCSMsee63+i+hcAmoViBlreXkWTokeetzEewvvRDAKy/Kx8gCZMtnBw2w\nrwcqWgk5AgMBAAECggEADzhmcywS/4WK0DrCELIUZ/kHHlqNaMm8L09LSxCT9SV/\nUv96/GgC+tTJqQscmCwAdT2PFTczVjtV4V/jfj3cvnOJUYDlEvEsviksUFtqc9Lc\ncHJlqjhF5C1A2BFNkegie8HX2co63F66WearIW/k4DaxRYaAVymyWbKTRhFlmrqJ\ng3pF/YR2RADUskw0pil4rm78+H6nh3uoeFp9V8zAzrX6cfKmeivz/fp7gTLvsa5U\nHVBxoK8KrWY7KL8Dux7IDnPrKSick2UUI0ukYJp6vIjYq3cWyVxIkzUCkXfhUF96\nIMP21YtJ1M0MTnBD7RHBoVTKihaAaMpDh4ptZPaTkQKBgQD5k8guupUoRKNQvzR1\nq0eujJB7eY+fWQhZzTeMHsysD1lsjyG4P6lawPwfS+iT/MO5jlK8O4WM01kRc1uC\nscDuwjt1vcdnwejOSs8tb5B7qjeQ/7rwpOpPCv44lCwHhRnoazCHvEiWtUQ0UXY5\nRIDqrz79HfBOaUVYaY66b0KZSQKBgQDek/zIBjDwuQO5gotpSESQnXptJoMRuVTN\n45RrxSZPw4BhP9+fhTG3tEfvq8tgOaPP9fz7cdbFWt9yYv8wDbQDIc3EI61Uie+C\nNOhpzdEmiRDUlrIgw+NHuBj2Pv/5DNz/6sZ+9oBug5KOOEgdwI6zAcSnEAe5zzJ4\nNCi/UbFgcQKBgQCW7wq3R9uAuNHTuW6uYuE87IFMSx3SjnOAa51WPiIlRDsebglE\ndiujWOagvrVvGgP8KdhbQdvoaMCKzyrehUVan1h6QkVfuGNkrtVQcxH719s285FI\ni1OwbcOE0Ac4nQQoDPsSe4miqwkOYt2OkKEuTMFZLkvv/7YSW/QXR8YNEQKBgHik\n2FiHWpGwhz9PbkeD335PjaOKQ3Mg9MGgwLtlom2Lt5N+7rRlmtxLQM69XMBsnclE\nOXsFaneQ2RsEY/PlCZTFBuZwvCvdlFAMY4muANcVZmUExcqSwygFtqoK3e5dtZCV\n7j+1V0oP0Sl7gkN2MyL+K1yuiLGDiIS1KP0Cx9VRAoGAMOkHbTEBdd7/lSKNbw1L\n3/A1HJ2V/nnPmSLUO7W9wBLPTHc/x3elpugixg1j+GXF55r9k1d1pnkN4p/he7bV\ntcoTs4SAJpMZg5iShw8GLoc28YfVXAgqqbm7lVcUYAEUDgCdlWA31RXSjcyPLi8D\nGQnAYYGO9bC3zCGRZffiixA=\n-----END PRIVATE KEY-----\n","client_email": "firestore@zedouto-project.iam.gserviceaccount.com","client_id": "113599318388756641331","auth_uri": "https://accounts.google.com/o/oauth2/auth","token_uri": "https://oauth2.googleapis.com/token","auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firestore%40zedouto-project.iam.gserviceaccount.com"}
+        Jwt.Key: 190ec7f0cdb64328a0c919571e93487b
+        Jwt.HourExpiration: 2
