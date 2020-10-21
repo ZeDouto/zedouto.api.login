@@ -38,6 +38,6 @@ stages:
     steps:
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/src/Zedouto.Api.Login/appsettings.json'
+        PathtoPublish: '**/Zedouto.Api.Login/appsettings.json'
         ArtifactName: 'AppSettings'
         publishLocation: 'Container'
