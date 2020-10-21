@@ -16,6 +16,8 @@ namespace Zedouto.Api.Service.Extensions
         {
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IJwtService<User>, UserJwtService>();
+            services.AddSingleton<ICryptographyService, CryptographSHA512Service>();
+            
             services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
 
             var builder = new FirestoreClientBuilder();

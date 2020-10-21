@@ -13,7 +13,6 @@ namespace Zedouto.Api.Service
 {
     public class UserJwtService : IJwtService<User>
     {
-        private const int TOKEN_EXPIRATION_HOUR = 2;
         private readonly JwtConfigurationSettings _jwtSettings;
 
         public UserJwtService(JwtConfigurationSettings jwtSettings)
@@ -25,8 +24,7 @@ namespace Zedouto.Api.Service
         {
             var claims = new[]
             {
-                new Claim(nameof(model.Login), model.Login),
-                new Claim(nameof(model.Password), model.Password),
+                new Claim(JwtRegisteredClaimNames.UniqueName, model.Login),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             

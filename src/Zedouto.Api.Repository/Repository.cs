@@ -80,7 +80,7 @@ namespace Zedouto.Api.Repository
 
             var snapshot = await query.GetSnapshotAsync();
 
-            return snapshot.Cast<T>().ToList();
+            return snapshot.Cast<T>();
         }
     }
 }
