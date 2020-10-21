@@ -19,9 +19,7 @@ namespace Zedouto.Api.Service
             using (var hmac = new HMACSHA512(_cryptoKey))
             {
                 var hashValue = hmac.ComputeHash(Encoding.UTF8.GetBytes(text));
-                var item = Encoding.UTF8.GetString(hashValue);
-
-                return item;
+                return Encoding.UTF8.GetString(hashValue);
             }
         }
 

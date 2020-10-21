@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Zedouto.Api.Facade.Interfaces;
 using Zedouto.Api.Login.Mapping;
 using Zedouto.Api.Model.Entities;
-using Zedouto.Api.Service.Interfaces;
 
 namespace Zedouto.Api.Login.Controllers
 {

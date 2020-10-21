@@ -26,9 +26,13 @@ namespace Zedouto.Api.Facade
 
         public async Task AddUserAsync(User user)
         {
-            user.Password = await _cryptographyService.CryptographAsync(user.Password);
-            
-            await _userService.AddUserAsync(user);
+            var userInsert = new User
+            {
+                Login = user.Login,
+                Password = await _cryptographyService.CryptographAsync(user.Password)
+            };
+
+            await _userService.AddUserAsync(userInsert);
         }
 
         public async Task<UserToken> LoginAsync(User user)

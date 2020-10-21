@@ -14,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Zedouto.Api.Facade.Extensions;
 using Zedouto.Api.Model.Configurations;
-using Zedouto.Api.Service.Extensions;
 
 namespace Zedouto.Api.Login
 {
@@ -50,8 +49,7 @@ namespace Zedouto.Api.Login
             });
             
             services.AddControllers();
-            services.AddApplicationDependencies(firestoreSettings);
-            services.AddServicesDependency();
+            services.AddServicesDependency(firestoreSettings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

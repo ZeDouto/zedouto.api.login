@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Zedouto.Api.Model\Zedouto.Api.Model.csproj" />
-    <ProjectReference Include="..\Zedouto.Api.Service\Zedouto.Api.Service.csproj" />
     <ProjectReference Include="..\Zedouto.Api.Facade\Zedouto.Api.Facade.csproj" />
   </ItemGroup>
 
