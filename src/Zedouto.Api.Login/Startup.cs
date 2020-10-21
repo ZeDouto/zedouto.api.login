@@ -12,8 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Zedouto.Api.Facade.Extensions;
-using Zedouto.Api.Model.Configurations;
+using Zedouto.Api.Login.Facade.Extensions;
+using Zedouto.Api.Login.Model.Configurations;
 
 namespace Zedouto.Api.Login
 {

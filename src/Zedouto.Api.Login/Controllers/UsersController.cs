@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Zedouto.Api.Facade.Interfaces;
+using Zedouto.Api.Login.Facade.Interfaces;
 using Zedouto.Api.Login.Mapping;
-using Zedouto.Api.Model.Entities;
+using Zedouto.Api.Login.Model.Entities;
 
 namespace Zedouto.Api.Login.Controllers
 {
