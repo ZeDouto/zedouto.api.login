@@ -1,14 +1,15 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 
-# Copy csproj and restore as distinct layers
-COPY src/Zedouto.Api.Login/*.csproj ./
-RUN dotnet restore
+RUN mkdir -p src
+WORKDIR /src
 
-# Copy everything else and build
-COPY src/Zedouto.Api.Login ./
-WORKDIR /app
-RUN dotnet publish -c Release -o /out
+
+# Copy csproj and restore as distinct layers
+COPY src/ ./
+RUN dotnet restore ./Zedouto.Api.Login/Zedouto.Api.Login.csproj
+
+RUN dotnet publish -c Release -o /out ./Zedouto.Api.Login
 
 # Expose container port
 EXPOSE 8080
