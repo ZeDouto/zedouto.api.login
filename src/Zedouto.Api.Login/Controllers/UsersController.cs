@@ -11,6 +11,7 @@ namespace Zedouto.Api.Login.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserFacade _userFacade;
+        private const string INVALID_PARAMETER_TEXT = "Parâmetros inválidos, favor validar o corpo da requisição";
         
         public UsersController(IUserFacade userFacade)
         {
@@ -23,6 +24,11 @@ namespace Zedouto.Api.Login.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUserAsync([FromBody] User user)
         {
+            if (IsInvalidParameter(user))
+            {
+                return BadRequest(INVALID_PARAMETER_TEXT);
+            }
+            
             await _userFacade.AddUserAsync(user);
 
             return Created($"{Routes.API_CONTEXT}/{nameof(UsersController).Replace("Controller", string.Empty)}/{Routes.LOGIN_CONTEXT}", user);
@@ -34,6 +40,11 @@ namespace Zedouto.Api.Login.Controllers
         [HttpPost(Routes.LOGIN_CONTEXT)]
         public async Task<IActionResult> LoginAsync([FromBody] User user)
         {
+            if (IsInvalidParameter(user))
+            {
+                return BadRequest(INVALID_PARAMETER_TEXT);
+            }
+
             var token = await _userFacade.LoginAsync(user);
 
             if (token is null)
@@ -42,6 +53,11 @@ namespace Zedouto.Api.Login.Controllers
             }
             
             return Ok(token);
+        }
+
+        private bool IsInvalidParameter(User user)
+        {
+            return string.IsNullOrEmpty(user.Login) || string.IsNullOrEmpty(user.Password);
         }
     }
 }
