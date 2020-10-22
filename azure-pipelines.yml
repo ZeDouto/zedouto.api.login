@@ -28,6 +28,6 @@ stages:
     
     - task: PublishBuildArtifacts@1
       inputs:
-        PathtoPublish: 'src/'
+        PathtoPublish: './'
         ArtifactName: 'AppSettings'
         publishLocation: 'Container'
