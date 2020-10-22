@@ -39,3 +39,4 @@ stages:
     - script: |
         ls
         ls src/
+        ls src/Zedouto.Api.Login/
