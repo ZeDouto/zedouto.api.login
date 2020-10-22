@@ -14,16 +14,20 @@ stages:
             projects: '**/Zedouto.Api.Login/*.csproj'
 
 - stage:
-  displayName: 'Docker build and Push'
+  displayName: 'Publish artifact (AppSettings)'
   dependsOn: 'DotnetBuild'
   condition: in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/dev')
   jobs:
   - job:
-    displayName: 'Build and Push Docker an image'
+    displayName: 'Publish appsettings'
     steps:
-    - task: Docker@2
+    - script: |
+        ls
+        ls src/
+        ls src/Zedouto.Api.Login/
+    
+    - task: PublishBuildArtifacts@1
       inputs:
-        containerRegistry: 'DockerHub - souzamateus99'
-        repository: 'souzamateus99/login-api'
-        command: 'buildAndPush'
-        Dockerfile: 'Dockerfile'
+        PathtoPublish: './'
+        ArtifactName: 'AppSettings'
+        publishLocation: 'Container'
