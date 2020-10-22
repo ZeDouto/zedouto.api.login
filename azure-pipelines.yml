@@ -40,3 +40,9 @@ stages:
         ls
         ls src/
         ls src/Zedouto.Api.Login/
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'src/Zedouto.Api.Login/appsettings.json'
+        ArtifactName: 'AppSettings'
+        publishLocation: 'Container'
