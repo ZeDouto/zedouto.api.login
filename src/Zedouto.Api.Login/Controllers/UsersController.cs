@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Zedouto.Api.Login.Facade.Interfaces;
 using Zedouto.Api.Login.Mapping;
-using Zedouto.Api.Login.Model.Entities;
+using Zedouto.Api.Login.Model;
 
 namespace Zedouto.Api.Login.Controllers
 {
@@ -23,41 +23,47 @@ namespace Zedouto.Api.Login.Controllers
         // </summary>
         [HttpPost]
         public async Task<IActionResult> AddUserAsync([FromBody] User user)
-        {
-            if (IsInvalidParameter(user))
-            {
-                return BadRequest(INVALID_PARAMETER_TEXT);
-            }
-            
+        {            
             await _userFacade.AddUserAsync(user);
 
-            return Created($"{Routes.API_CONTEXT}/{nameof(UsersController).Replace("Controller", string.Empty)}/{Routes.LOGIN_CONTEXT}", user);
+            return Created(string.Empty, user);
         }
 
         // <summary>
-        // Return a User in database
+        // Return a User
         // </summary>
         [HttpPost(Routes.LOGIN_CONTEXT)]
         public async Task<IActionResult> LoginAsync([FromBody] User user)
         {
-            if (IsInvalidParameter(user))
-            {
-                return BadRequest(INVALID_PARAMETER_TEXT);
-            }
-
             var token = await _userFacade.LoginAsync(user);
 
-            if (token is null)
+            if(IsValidUserToken(token))
             {
-                return NoContent();
+                return Ok(token);
             }
-            
-            return Ok(token);
+
+            return NoContent();
         }
 
-        private bool IsInvalidParameter(User user)
+        // <summary>
+        // Return a User by login
+        // </summary>
+        [HttpGet("{cpf}")]
+        public async Task<IActionResult> GetAsync([FromRoute] string cpf)
         {
-            return string.IsNullOrEmpty(user.Login) || string.IsNullOrEmpty(user.Password);
+            var token = await _userFacade.GetByCpfAsync(cpf);
+
+            if(IsValidUserToken(token))
+            {
+                return Ok(token);
+            }
+
+            return NoContent();
+        }
+
+        private bool IsValidUserToken(UserToken user)
+        {
+            return user != default;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Zedouto.Api.Login.Service
             _cryptoKey = new byte[64];
         }
         
-        public async Task<string> CryptographAsync(string text)
+        public string Cryptograph(string text)
         {
             using (var hmac = new HMACSHA512(_cryptoKey))
             {
@@ -23,9 +23,9 @@ namespace Zedouto.Api.Login.Service
             }
         }
 
-        public async Task<bool> EqualsTextAsync(string text, string cryptoText)
+        public bool EqualsText(string text, string cryptoText)
         {
-            var hash = await CryptographAsync(text);
+            var hash = Cryptograph(text);
 
             return hash.Equals(cryptoText);
         }

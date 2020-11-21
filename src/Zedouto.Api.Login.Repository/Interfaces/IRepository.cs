@@ -6,11 +6,11 @@ using Google.Cloud.Firestore;
 
 namespace Zedouto.Api.Login.Repository.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository
     {
-        Task<T> GetByPathIdAsync(string pathId);
-        Task<T> GetAsync(Dictionary<string, object> filters);
-        Task<IEnumerable<T>> ListAsync(Dictionary<string, object> filters);
-        Task<Timestamp> AddAsync(T entity);
+        Task<T> GetByPathIdAsync<T>(string pathId);
+        Task<T> GetAsync<T>(Dictionary<string, object> filters);
+        Task<IEnumerable<T>> ListAsync<T>(Dictionary<string, object> filters);
+        Task<string> AddAsync<T>(T entity);
     }
 }
