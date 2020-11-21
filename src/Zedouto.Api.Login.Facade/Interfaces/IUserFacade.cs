@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
-using Zedouto.Api.Login.Model.Entities;
-using Zedouto.Api.Login.Model.Models;
+using Zedouto.Api.Login.Model;
 
 namespace Zedouto.Api.Login.Facade.Interfaces
 {
@@ -8,5 +7,6 @@ namespace Zedouto.Api.Login.Facade.Interfaces
     {
         Task AddUserAsync(User user);
         Task<UserToken> LoginAsync(User user);
+        Task<UserToken> GetByCpfAsync(string cpf);
     }
 }

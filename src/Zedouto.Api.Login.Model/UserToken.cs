@@ -1,6 +1,6 @@
 using System;
 
-namespace Zedouto.Api.Login.Model.Models
+namespace Zedouto.Api.Login.Model
 {
     public class UserToken
     {
