@@ -12,25 +12,45 @@ using static Google.Apis.Auth.OAuth2.ComputeCredential;
 
 namespace Zedouto.Api.Login.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class FirestoreRepository : IFirestoreRepository
     {
         private readonly CollectionReference _collection;
 
-        public Repository(CollectionReference collection)
+        private const string NESTED_PROPERTY_TEMPLATE_NAME = "property";
+
+        public FirestoreRepository(CollectionReference collection)
         {
             _collection = collection;
         }
 
-        public async Task<Timestamp> AddAsync(T entity)
-        {            
+        public async Task<string> AddAsync<T>(T entity)
+        {
             var document = _collection.Document();
 
-            var model = await document.SetAsync(entity);
-
-            return model.UpdateTime;
+            await document.SetAsync(entity);
+            
+            return document.Id;
         }
 
-        public async Task<T> GetAsync(Dictionary<string, object> filters)
+        public async Task<string> AddNestedAsync<T>(T entity, string nestedPropName, string firestoreDocumentId)
+        {
+            if(string.IsNullOrWhiteSpace(firestoreDocumentId))
+            {
+                return default(string);
+            }
+            
+            var document = _collection.Document(firestoreDocumentId);
+
+            nestedPropName = string.IsNullOrWhiteSpace(nestedPropName)
+                            ? NESTED_PROPERTY_TEMPLATE_NAME
+                            : nestedPropName;
+
+            var model = await document.UpdateAsync(new Dictionary<string, object> { {nestedPropName, entity} });
+
+            return document.Id;
+        }
+
+        public async Task<T> GetAsync<T>(Dictionary<string, object> filters)
         {
             var filter = filters.First();
             var query = _collection.WhereEqualTo(filter.Key, filter.Value);
@@ -44,17 +64,26 @@ namespace Zedouto.Api.Login.Repository
 
             var snapshot = await query.GetSnapshotAsync();
 
-            return snapshot.FirstOrDefault()?.ConvertTo<T>();
+            if(snapshot.Count > 0)
+            {
+                var documentSnapshot = snapshot.FirstOrDefault();
+
+                return documentSnapshot.Exists
+                    ? documentSnapshot.ConvertTo<T>()
+                    : default;
+            }
+            
+            return default;
         }
 
-        public async Task<T> GetByPathIdAsync(string pathId)
+        public async Task<T> GetByPathIdAsync<T>(string pathId)
         {
             var snapshot = await _collection.Document(pathId).GetSnapshotAsync();
             
             return snapshot.ConvertTo<T>();
         }
 
-        public async Task<IEnumerable<T>> ListAsync(Dictionary<string, object> filters)
+        public async Task<IEnumerable<T>> ListAsync<T>(Dictionary<string, object> filters)
         {
             var filter = filters.First();
             var query = _collection.WhereEqualTo(filter.Key, filter.Value);

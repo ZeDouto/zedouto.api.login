@@ -4,7 +4,7 @@ namespace Zedouto.Api.Login.Service.Interfaces
 {
     public interface ICryptographyService
     {
-        Task<string> CryptographAsync(string text);
-        Task<bool> EqualsTextAsync(string text, string cryptoText);
+        string Cryptograph(string text);
+        bool EqualsText(string text, string cryptoText);
     }
 }
