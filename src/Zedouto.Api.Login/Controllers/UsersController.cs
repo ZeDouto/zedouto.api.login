@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Zedouto.Api.Login.Facade.Interfaces;
@@ -69,6 +70,19 @@ namespace Zedouto.Api.Login.Controllers
             if(IsValidUserToken(user))
             {
                 return Ok(user);
+            }
+
+            return NoContent();
+        }
+
+        [HttpGet("doctors")]
+        public async Task<IActionResult> GetDoctorsAsync([FromQuery(Name = "crms")] string crms)
+        {
+            var users = await _userFacade.GetAllByCrmsAsync(crms.Split(','));
+
+            if(users.Any() && users.All(user => IsValidUserToken(user)))
+            {
+                return Ok(users);
             }
 
             return NoContent();
