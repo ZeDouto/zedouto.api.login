@@ -61,7 +61,25 @@ namespace Zedouto.Api.Login.Controllers
             return NoContent();
         }
 
+        [HttpGet("token")]
+        public async Task<IActionResult> GetTokenVaueAsync([FromHeader(Name = "token")] string token)
+        {
+            var user = await _userFacade.DeserializeTokenAsync(token);
+
+            if(IsValidUserToken(user))
+            {
+                return Ok(user);
+            }
+
+            return NoContent();
+        }
+
         private bool IsValidUserToken(UserToken user)
+        {
+            return user != default;
+        }
+
+        private bool IsValidUserToken(User user)
         {
             return user != default;
         }
