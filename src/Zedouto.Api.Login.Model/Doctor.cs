@@ -1,14 +1,14 @@
 using System.Text.Json.Serialization;
-using Google.Cloud.Firestore;
+using static Zedouto.Api.Login.Model.Constants.JsonPropertiesName;
 
 namespace Zedouto.Api.Login.Model
 {
     public class Doctor
     {
-        [JsonPropertyName("crm")]
+        [JsonPropertyName(CRM_PROPERTY_TEXT)]
         public string Crm { get; set; }
 
-        [JsonPropertyName("especialidade")]
+        [JsonPropertyName(SPECIALTY_PROPERTY_TEXT)]
         public string Specialty { get; set; }
     }
 }

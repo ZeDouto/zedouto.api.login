@@ -8,7 +8,7 @@ namespace Zedouto.Api.Login.Model.Extensions
     public class UserPropertyConverter : JsonConverter<User>
     {
         public override User Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
+        {            
             var user = JsonSerializer.Deserialize<UserWithoutConverterAttribute>(ref reader, options);
 
             if(IsValidUser(user))
@@ -18,10 +18,10 @@ namespace Zedouto.Api.Login.Model.Extensions
                     return user;
                 }
 
-                throw new JsonException($"The property {nameof(User.Cpf)} is invalid");    
+                return default;
             }
             
-            throw new JsonException($"The properties {nameof(User.Name)} and {nameof(User.Cpf)} can not empty");
+            return default;
         }
 
         public override void Write(Utf8JsonWriter writer, User value, JsonSerializerOptions options)

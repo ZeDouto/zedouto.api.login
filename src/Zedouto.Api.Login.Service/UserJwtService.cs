@@ -2,12 +2,13 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using static Zedouto.Api.Login.Model.Constants.JsonPropertiesName;
 using Microsoft.IdentityModel.Tokens;
 using Zedouto.Api.Login.Model.Configurations;
 using Zedouto.Api.Login.Model;
 using Zedouto.Api.Login.Service.Interfaces;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Zedouto.Api.Login.Service
 {
@@ -20,7 +21,7 @@ namespace Zedouto.Api.Login.Service
             _jwtSettings = jwtSettings;
         }
         
-        public UserToken GetToken(User model)
+        public UserToken SerializeToken(User model)
         {
             if(model is null)
             {
@@ -29,22 +30,22 @@ namespace Zedouto.Api.Login.Service
             
             var claims = new List<Claim>
             {
-                new Claim(nameof(User.Name), model.Name),
-                new Claim(nameof(User.Cpf), model.Cpf),
+                new Claim(NAME_PROPERTY_TEXT, model.Name),
+                new Claim(CPF_PROPERTY_TEXT, model.Cpf),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             if(!string.IsNullOrWhiteSpace(model.Login))
             {
-                claims.Add(new Claim(nameof(User.Login), model.Login));
+                claims.Add(new Claim(LOGIN_PROPERTY_TEXT, model.Login));
             }
 
             if(model.Doctor != null)
             {
                 claims.AddRange(new List<Claim>
                 {
-                    new Claim(nameof(User.Doctor.Crm), model.Doctor.Crm),
-                    new Claim(nameof(User.Doctor.Specialty), model.Doctor.Specialty)
+                    new Claim(CRM_PROPERTY_TEXT, model.Doctor.Crm),
+                    new Claim(SPECIALTY_PROPERTY_TEXT, model.Doctor.Specialty)
                 });
             }
             
@@ -66,6 +67,23 @@ namespace Zedouto.Api.Login.Service
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expiration
             };
+        }
+
+        public User DeserializeToken(UserToken token)
+        {
+            if(IsInvalidToken(token))
+            {
+                return default;
+            }
+
+            var tokenPayloadJson = new JwtSecurityTokenHandler().ReadJwtToken(token.Token).Payload.SerializeToJson();
+
+            return JsonSerializer.Deserialize<User>(tokenPayloadJson);
+        }
+
+        private bool IsInvalidToken(UserToken userToken)
+        {
+            return userToken.Expiration > DateTime.Now || string.IsNullOrWhiteSpace(userToken.Token);
         }
     }
 }
