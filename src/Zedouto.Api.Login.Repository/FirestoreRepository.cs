@@ -83,21 +83,35 @@ namespace Zedouto.Api.Login.Repository
             return snapshot.ConvertTo<T>();
         }
 
-        public async Task<IEnumerable<T>> ListAsync<T>(Dictionary<string, object> filters)
+        public async Task<IEnumerable<T>> ListAsync<T>(IEnumerable<Dictionary<string, object>> filters)
         {
-            var filter = filters.First();
-            var query = _collection.WhereEqualTo(filter.Key, filter.Value);
+            var entities = new List<T>();
 
-            for (var i = 1; i < filters.Count; i++)
+            var queries = filters.Select(filter =>
             {
-                filter = filters.ElementAt(i);
+                var query = _collection.WhereEqualTo(filter.First().Key, filter.First().Value);
+                
+                return filter.Aggregate(query, (query, filter) => query.WhereEqualTo(filter.Key, filter.Value));
+            });
+            
+            foreach(var query in queries)
+            {
+                var snapshot = await query.GetSnapshotAsync();
 
-                query = query.WhereEqualTo(filter.Key, filter.Value);
+                entities.AddRange(snapshot.Select(s => s.ConvertTo<T>()));
             }
+
+            return entities;
+        }
+
+        public async Task<IEnumerable<T>> ContainsAsync<T>(string databaseField, IEnumerable<object> elements, params string[] fieldsToReturn)
+        {            
+            var query = _collection.WhereIn(databaseField, elements);
+            query = query.Select(fieldsToReturn);
 
             var snapshot = await query.GetSnapshotAsync();
 
-            return snapshot.Cast<T>();
+            return snapshot.Select(s => s.ConvertTo<T>());
         }
     }
 }

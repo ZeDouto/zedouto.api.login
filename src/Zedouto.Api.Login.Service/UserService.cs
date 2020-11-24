@@ -6,6 +6,7 @@ using Zedouto.Api.Login.Model.Entities;
 using Zedouto.Api.Login.Model;
 using Zedouto.Api.Login.Repository.Interfaces;
 using Zedouto.Api.Login.Service.Interfaces;
+using System.Linq;
 
 namespace Zedouto.Api.Login.Service
 {
@@ -14,12 +15,14 @@ namespace Zedouto.Api.Login.Service
         private readonly IFirestoreRepository _repository;
         private readonly IMapper _mapper;
         private readonly ICryptographyService _cryptographyService;
+        private readonly string[] _fieldsWithoutSensitiveInfo;
         
         public UserService(IFirestoreRepository repository, IMapper mapper, ICryptographyService cryptographyService)
         {
             _repository = repository;
             _mapper = mapper;
             _cryptographyService = cryptographyService;
+            _fieldsWithoutSensitiveInfo = new string[] { "Cpf", "Doctor", "Name" };
         }
         
         public async Task AddUserAsync(User user)
@@ -36,13 +39,14 @@ namespace Zedouto.Api.Login.Service
             {
                 var doctorEntity = MapToEntity<DoctorEntity, Doctor>(user.Doctor);
 
-                await _repository.AddNestedAsync(doctorEntity, documentId, nameof(Doctor));
+                await _repository.AddNestedAsync(doctorEntity, nameof(Doctor), documentId);
             }
         }
 
         public async Task<User> GetUserAsync(User user)
         {
-            var entity = await _repository.GetAsync<UserEntity>(new Dictionary<string, object> {
+            var entity = await _repository.GetAsync<UserEntity>(new Dictionary<string, object>
+            {
                 { nameof(User.Cpf), user.Cpf }
             });
 
@@ -51,12 +55,30 @@ namespace Zedouto.Api.Login.Service
 
         public async Task<User> GetByLoginAndSenhaAsync(User user)
         {
-            var entity = await _repository.GetAsync<UserEntity>(new Dictionary<string, object> {
+            var entity = await _repository.GetAsync<UserEntity>(new Dictionary<string, object>
+            {
                 { nameof(User.Login), user.Login },
                 { nameof(User.Password), _cryptographyService.Cryptograph(user.Password) }
             });
             
             return EntityToMap<UserEntity, User>(entity);
+        }
+
+        public async Task<User> GetByDoctorAsync(Doctor doctor)
+        {
+            var entity = await _repository.GetAsync<UserEntity>(new Dictionary<string, object>
+            {
+                { nameof(User.Doctor.Crm), doctor.Crm }
+            });
+
+            return EntityToMap<UserEntity, User>(entity);
+        }
+
+        public async Task<IEnumerable<User>> GetByDoctorsAsync(IEnumerable<Doctor> doctors)
+        {
+            var entities = await _repository.ContainsAsync<UserEntity>($"{nameof(User.Doctor)}.{nameof(User.Doctor.Crm)}", doctors.Select(d =>  d.Crm), _fieldsWithoutSensitiveInfo);
+
+            return EntityToMap<IEnumerable<UserEntity>, IEnumerable<User>>(entities);
         }
 
         public TMap EntityToMap<TEntity, TMap>(TEntity entity)
@@ -65,7 +87,7 @@ namespace Zedouto.Api.Login.Service
         }
 
         public TEntity MapToEntity<TEntity, TMap>(TMap map)
-        {            
+        {
             return _mapper.Map<TEntity>(map);
         }
 

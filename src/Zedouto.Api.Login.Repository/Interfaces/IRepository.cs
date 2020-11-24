@@ -10,7 +10,7 @@ namespace Zedouto.Api.Login.Repository.Interfaces
     {
         Task<T> GetByPathIdAsync<T>(string pathId);
         Task<T> GetAsync<T>(Dictionary<string, object> filters);
-        Task<IEnumerable<T>> ListAsync<T>(Dictionary<string, object> filters);
+        Task<IEnumerable<T>> ListAsync<T>(IEnumerable<Dictionary<string, object>> filters);
         Task<string> AddAsync<T>(T entity);
     }
 }
