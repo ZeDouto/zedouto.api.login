@@ -30,10 +30,14 @@ namespace Zedouto.Api.Login.Service
             var claims = new List<Claim>
             {
                 new Claim(nameof(User.Name), model.Name),
-                new Claim(nameof(User.Login), model.Login),
                 new Claim(nameof(User.Cpf), model.Cpf),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            if(!string.IsNullOrWhiteSpace(model.Login))
+            {
+                claims.Add(new Claim(nameof(User.Login), model.Login));
+            }
 
             if(model.Doctor != null)
             {
