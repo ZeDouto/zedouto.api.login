@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Zedouto.Api.Login.Facade.Interfaces;
 using Zedouto.Api.Login.Model;
 using Zedouto.Api.Login.Service.Interfaces;
@@ -21,11 +22,16 @@ namespace Zedouto.Api.Login.Facade
             await _userService.AddUserAsync(user);
         }
 
+        public async Task<User> DeserializeTokenAsync(string token)
+        {
+            return _jwtService.DeserializeToken(new UserToken { Token = token, Expiration = DateTime.Now });
+        }
+
         public async Task<UserToken> GetByCpfAsync(string cpf)
         {
             var user = await _userService.GetUserAsync(new User { Cpf = cpf });
 
-            return _jwtService.GetToken(user);
+            return _jwtService.SerializeToken(user);
         }
 
         public async Task<UserToken> LoginAsync(User user)
@@ -37,7 +43,7 @@ namespace Zedouto.Api.Login.Facade
                 return default;
             }
 
-            return _jwtService.GetToken(userLogged);
+            return _jwtService.SerializeToken(userLogged);
         }
     }
 }

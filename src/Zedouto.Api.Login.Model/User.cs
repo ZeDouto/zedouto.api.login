@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using static Zedouto.Api.Login.Model.Constants.JsonPropertiesName;
 using Zedouto.Api.Login.Model.Extensions;
 
 namespace Zedouto.Api.Login.Model
@@ -6,19 +7,19 @@ namespace Zedouto.Api.Login.Model
     [JsonConverter(typeof(UserPropertyConverter))]
     public class User
     {
-        [JsonPropertyName("login")]
+        [JsonPropertyName(LOGIN_PROPERTY_TEXT)]
         public string Login { get; set; }
 
-        [JsonPropertyName("senha")]
+        [JsonPropertyName(PASSWORD_PROPERTY_TEXT)]
         public string Password { get; set; }
 
-        [JsonPropertyName("nome")]
+        [JsonPropertyName(NAME_PROPERTY_TEXT)]
         public string Name { get; set; }
 
-        [JsonPropertyName("cpf")]
+        [JsonPropertyName(CPF_PROPERTY_TEXT)]
         public string Cpf { get; set; }
 
-        [JsonPropertyName("medico")]
+        [JsonPropertyName(DOCTOR_PROPERTY_TEXT)]
         public Doctor Doctor { get; set; }
     }
 
