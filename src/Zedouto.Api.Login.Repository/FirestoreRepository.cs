@@ -50,7 +50,7 @@ namespace Zedouto.Api.Login.Repository
             return document.Id;
         }
 
-        public async Task<T> GetAsync<T>(Dictionary<string, object> filters)
+        public async Task<T> GetAsync<T>(Dictionary<string, object> filters, params string[] fieldsReturn)
         {
             var filter = filters.First();
             var query = _collection.WhereEqualTo(filter.Key, filter.Value);
@@ -76,14 +76,14 @@ namespace Zedouto.Api.Login.Repository
             return default;
         }
 
-        public async Task<T> GetByPathIdAsync<T>(string pathId)
+        public async Task<T> GetByDocumentId<T>(string documentId)
         {
-            var snapshot = await _collection.Document(pathId).GetSnapshotAsync();
+            var snapshot = await _collection.Document(documentId).GetSnapshotAsync();
             
             return snapshot.ConvertTo<T>();
         }
 
-        public async Task<IEnumerable<T>> ListAsync<T>(IEnumerable<Dictionary<string, object>> filters)
+        public async Task<IEnumerable<T>> ListAsync<T>(IEnumerable<Dictionary<string, object>> filters, params string[] fieldsReturn)
         {
             var entities = new List<T>();
 
@@ -104,10 +104,19 @@ namespace Zedouto.Api.Login.Repository
             return entities;
         }
 
-        public async Task<IEnumerable<T>> ContainsAsync<T>(string databaseField, IEnumerable<object> elements, params string[] fieldsToReturn)
+        public async Task<IEnumerable<T>> ContainsAsync<T>(string databaseField, IEnumerable<object> elements, params string[] fieldsReturn)
         {            
             var query = _collection.WhereIn(databaseField, elements);
-            query = query.Select(fieldsToReturn);
+            query = query.Select(fieldsReturn);
+
+            var snapshot = await query.GetSnapshotAsync();
+
+            return snapshot.Select(s => s.ConvertTo<T>());
+        }
+
+        public async Task<IEnumerable<T>> ListAsync<T>(params string[] fieldsReturn)
+        {
+            var query = _collection.Select(fieldsReturn);
 
             var snapshot = await query.GetSnapshotAsync();
 
