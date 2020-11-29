@@ -10,6 +10,6 @@ namespace Zedouto.Api.Login.Facade.Interfaces
         Task<UserToken> LoginAsync(User user);
         Task<UserToken> GetByCpfAsync(string cpf);
         Task<User> DeserializeTokenAsync(string token);
-        Task<IEnumerable<User>> GetAllByCrmsAsync(params string[] crms);
+        Task<IEnumerable<User>> GetAllByCrmsAsync(string specialty = default(string), params string[] crms);
     }
 }

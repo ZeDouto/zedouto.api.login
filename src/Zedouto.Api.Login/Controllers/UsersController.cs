@@ -76,9 +76,9 @@ namespace Zedouto.Api.Login.Controllers
         }
 
         [HttpGet("doctors")]
-        public async Task<IActionResult> GetDoctorsAsync([FromQuery(Name = "crms")] string crms)
+        public async Task<IActionResult> GetDoctorsAsync([FromQuery(Name = "especialidade")] string specialty, [FromQuery(Name = "crms")] string crms)
         {
-            var users = await _userFacade.GetAllByCrmsAsync(crms.Split(','));
+            var users = await _userFacade.GetAllByCrmsAsync(specialty, crms.Split(','));
 
             if(users.Any() && users.All(user => IsValidUserToken(user)))
             {

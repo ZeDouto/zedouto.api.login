@@ -29,9 +29,9 @@ namespace Zedouto.Api.Login.Facade
             return _jwtService.DeserializeToken(new UserToken { Token = token, Expiration = DateTime.Now });
         }
 
-        public async Task<IEnumerable<User>> GetAllByCrmsAsync(params string[] crms)
+        public async Task<IEnumerable<User>> GetAllByCrmsAsync(string specialty = default(string), params string[] crms)
         {
-            return await _userService.GetByDoctorsAsync(crms.Select(crm => new Doctor { Crm = crm }));
+            return await _userService.GetByDoctorsAsync(crms.Select(crm => new Doctor { Crm = crm, Specialty = specialty }));
         }
 
         public async Task<UserToken> GetByCpfAsync(string cpf)
