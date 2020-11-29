@@ -76,7 +76,17 @@ namespace Zedouto.Api.Login.Service
 
         public async Task<IEnumerable<User>> GetByDoctorsAsync(IEnumerable<Doctor> doctors)
         {
-            var entities = await _repository.ContainsAsync<UserEntity>($"{nameof(User.Doctor)}.{nameof(User.Doctor.Crm)}", doctors.Select(d =>  d.Crm), _fieldsWithoutSensitiveInfo);
+            var elementsToSearch = new Dictionary<string, IEnumerable<object>>
+            {
+                { $"{nameof(User.Doctor)}.{nameof(User.Doctor.Crm)}", doctors.Select(d =>  d.Crm) }
+            };
+
+            if(doctors.All(d => !string.IsNullOrWhiteSpace(d.Specialty)))
+            {
+                elementsToSearch.Add($"{nameof(User.Doctor)}.{nameof(User.Doctor.Specialty)}", doctors.Select(d => d.Specialty));
+            }
+            
+            var entities = await _repository.ContainsAsync<UserEntity>(elementsToSearch, _fieldsWithoutSensitiveInfo);
 
             return EntityToMap<IEnumerable<UserEntity>, IEnumerable<User>>(entities);
         }

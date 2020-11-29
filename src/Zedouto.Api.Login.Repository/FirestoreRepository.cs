@@ -104,10 +104,11 @@ namespace Zedouto.Api.Login.Repository
             return entities;
         }
 
-        public async Task<IEnumerable<T>> ContainsAsync<T>(string databaseField, IEnumerable<object> elements, params string[] fieldsReturn)
+        public async Task<IEnumerable<T>> ContainsAsync<T>(Dictionary<string, IEnumerable<object>> elements, params string[] fieldsReturn)
         {            
-            var query = _collection.WhereIn(databaseField, elements);
-            query = query.Select(fieldsReturn);
+            var query = _collection.Select(fieldsReturn);
+
+            query = elements.Aggregate(query, (quey, element) => query.WhereIn(element.Key, element.Value));
 
             var snapshot = await query.GetSnapshotAsync();
 
